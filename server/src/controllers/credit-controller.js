@@ -73,7 +73,7 @@ const checkRechargeEmails = async (req, res) => {
                     continue;
                 }
                 // Process recharge
-                user.credits += 5;
+                user.credits = 5;
                 user.lastRechargeDate = new Date();
                 await user.save();
                 // Send confirmation email
@@ -88,7 +88,7 @@ const checkRechargeEmails = async (req, res) => {
                     }
                 });
             } catch (error) {
-                console.log("error", error);
+                console.log("error1", error);
                 throw error;
             }
         }
@@ -99,16 +99,19 @@ const checkRechargeEmails = async (req, res) => {
                 .status(StatusCodes.OK)
                 .json(SuccessResponse);
     } catch (error) {
-        console.log("error", error);
         if(error.name=='GaxiosError'){
             let explanation=[];
             error.errors.forEach((err)=>explanation.push(err.message));
             throw new AppError(explanation,StatusCodes.BAD_REQUEST);
         }
+        if(error.name=='TypeError'){
+            throw new AppError(error.message, StatusCodes.BAD_REQUEST);
+        }
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while processing recharge requests';
+        console.log(ErrorResponse);
         return res
-                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json(ErrorResponse);
     }
 };

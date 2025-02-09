@@ -24,6 +24,7 @@ const googleLogin = async (req, res) => {
         );
         //return res
         SuccessResponse.message = 'Logged in successfully';
+        SuccessResponse.data = {};
         SuccessResponse.data.token = token;
         SuccessResponse.data.credits = user.credits;
         return res

@@ -9,7 +9,7 @@ const findMatch = async (query, networkMembers) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const prompt = `Given the following list of investors and mentors : ${JSON.stringify(networkMembers)} And this user query : "${query}".
         Please analyze the query and find the most suitable investor or mentor from the list.Return only name of the most suitable person.
-        If no suitable person is found, return "No match found yet. Try again later".`;
+        If no suitable person is found, return only "No match found yet.Try again later".`;
 
         const result = await model.generateContent(prompt);
         const response = result.response.text();
