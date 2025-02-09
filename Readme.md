@@ -35,6 +35,10 @@ This platform allows startup founders to:
 - **Email Integration**:
   - Automatic recharge notifications
   - Recharge request processing via Gmail API
+
+### CRON-Jobs
+- Use of CRON jobs to scheduling of sending of mails.
+
 ### Error Handling:
   - Clear messages for credit exhaustion
   - Recharge attempt restrictions

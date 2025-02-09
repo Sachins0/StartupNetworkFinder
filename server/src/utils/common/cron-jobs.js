@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const {creditController} = require('../../controllers');
 
 function scheduleCrons(){
-    cron.schedule('*/5 * * * *', async() => {
+    cron.schedule('*/3 * * * *', async() => {
         await creditController.checkRechargeEmails();
     });
 }
