@@ -35,7 +35,7 @@ const sendRechargeConfirmationEmail = async (userEmail, newCredits) => {
       from: ServerConfig.mailUser,
       to: userEmail,
       subject: 'Credits Recharged Successfully',
-      text: `Your account has been successfully recharged with 5 credits. Your new balance is ${newCredits} credits.`
+      text: `Your account has been successfully recharged with 5 credits. Your new balance is ${newCredits} credits. Login to your account to start searching!`
     };
   
     await transporter.sendMail(mailOptions);

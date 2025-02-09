@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SearchBox from './SearchBox';
 import CreditsDisplay from './CreditsDisplay';
+import AllInvestors from './AllInvestors';
 
 const Dashboard = ({ onLogout, userData }) => {
   console.log(userData);
@@ -31,7 +32,9 @@ const Dashboard = ({ onLogout, userData }) => {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <SearchBox onCreditUpdate={handleCreditUpdate} />
+        <AllInvestors/>
       </main>
+      
     </div>
   );
 };

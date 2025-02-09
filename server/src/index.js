@@ -2,6 +2,7 @@ const express = require('express');
 const {ServerConfig, connectDB} = require('./config');
 const cors = require("cors");
 const apiRoutes = require('./routes');
+const CRON = require('./utils/common/cron-jobs')
 
 const app = express();
 
@@ -24,6 +25,7 @@ connectDB()
 
     app.listen(ServerConfig.PORT || 5000, () => {
         console.log(`⚙ Server is running at port : ${ServerConfig.PORT}`);
+        CRON();
     })
 })
 .catch((err) => {

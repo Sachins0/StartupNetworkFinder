@@ -4,7 +4,6 @@ const {sendRechargeEmail, sendRechargeRejectionEmail} = require("../services/ema
 const { ErrorResponse, SuccessResponse } = require("../utils/common");
 const NetworkMember = require("../models/NetworkMember");
 const findMatch = require("../services/ai-service");
-const AppError = require("../utils/errors/app-error");
 
 
 const search = async (req, res) => {
@@ -19,7 +18,7 @@ const search = async (req, res) => {
             //send email
             if(!user.lastRechargeDate){
                 await sendRechargeEmail(user.email);
-                ErrorResponse.message = "Your credits are exhausted. Please check your email to recharge. Login again for the changes to take effect.";
+                ErrorResponse.message = "Your credits are exhausted. Please check your email to recharge. Wait for 5 minutes and Login again for the changes to take effect.";
                 return res
                     .status(StatusCodes.BAD_REQUEST)
                     .json(ErrorResponse)
@@ -41,6 +40,7 @@ const search = async (req, res) => {
         await user.save();
         //return res
         SuccessResponse.message = "Match found successfully";
+        SuccessResponse.data = {};
         SuccessResponse.data.match = match;
         SuccessResponse.data.remainingCredits = user.credits;
         return res
@@ -55,6 +55,24 @@ const search = async (req, res) => {
     }
 };
 
+const findAllInvestors = async (req, res) => {
+    try {
+        const investors = await NetworkMember.find({}).sort({ name: 1 });
+        SuccessResponse.message = 'Investors fetched successfully';
+        SuccessResponse.data = investors;
+        return res
+                .status(StatusCodes.OK)
+                .json(SuccessResponse);
+      } catch (error) {
+        ErrorResponse.error = error;
+        ErrorResponse.message = 'Error fetching investors';
+        return res
+                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .json(ErrorResponse);
+      }
+};
+
 module.exports = {
-    search
+    search,
+    findAllInvestors
 };
