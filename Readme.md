@@ -6,7 +6,7 @@ A full-stack application connecting founders with investors/mentors using AI-pow
 
 - Frontend: https://startupnetworkfinderfrontend.onrender.com
 
-- Backend: https://startupnetworkfinderbackend.onrender.com
+- Backend: https://startupnetworkfinder-production.up.railway.app
 
 ![](./client/public/snf.gif)
 
