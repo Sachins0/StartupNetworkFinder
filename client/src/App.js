@@ -23,6 +23,8 @@ const App = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('creditError');
+    localStorage.removeItem('credits');
     setIsAuthenticated(false);
     setUserData(null);
   };

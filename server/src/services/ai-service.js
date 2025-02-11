@@ -8,23 +8,32 @@ const findMatch = async (query, networkMembers) => {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const prompt = `Given the following list of investors and mentors : ${JSON.stringify(networkMembers)} And this user query : "${query}".
-        Please analyze the query and find the suitable person from the list.Analyze the user query to identify:
-        Role Requested: Determine if the user is seeking a mentor or investor. Ignore the other role entirely.
-        Category: Extract the specific category mentioned in the query (e.g., "AI", "blockchain", "video").
-        From the provided list, strictly filter using these rules:
-        Return only a mentor if the query explicitly seeks a mentor, and only an investor if it seeks an investor.
-        The person’s expertise/domain must exactly match the extracted category (case-insensitive).
-        If no exact match exists for both role and category, return "No match found yet. Try again later".
-        Examples to follow:
-        Query: "Find me the best mentor for my AI startup" → Only return a mentor in the AI category. Ignore blockchain mentors or investors.
-        Query: "Looking for a mentor for my video startup" → Only return an investor in the video category.
-        if query is Find me best mentor for my AI startup then do not return name of mentor of blockchain instead return "No match found yet".
-        And if query is searching mentor for my video startup then do not return investor name instead return "No match found yet
-        Output Format:
-        Return only the name of the matching person (e.g., "John Doe").If no match, return "No match found yet. Try again later".
-        Do NOT:
-        Suggest alternate roles and categories.
-        Include explanations, markdown, or additional text.`;
+        Each network member object contains at least the following properties:
+        name, type (with possible values "mentor" or "investor") and category (e.g., "AI startup", "video startup", etc.)
+        Your Task:
+        Determine the Requested Role:
+        Parse the user query to determine whether the request is for a mentor or an investor.
+        Strictly ignore any network member whose type does not exactly match the requested role.
+        Extract the Requested Category:
+        Identify the specific category mentioned in the query (for example, "AI startup", "video startup", etc.).
+        Only consider network members whose category exactly matches the category extracted from the query.
+        Select the Matching Network Member:
+        From the list, find a network member that satisfies both:
+        Their type exactly matches the requested role.
+        Their category exactly matches the requested category.
+        Do not mix roles or categories. For example, if the query is for a mentor in the "video startup" category, do not consider any investors—even if they are in the "video startup" category.
+        Output Rules:
+        Return ONLY:
+        The name (e.g., “Jane Smith”) OR
+        “No match found yet. Try again later”.
+        No explanations, formatting, or exceptions.
+        Example:
+        If the query is:
+        "Find me the best mentor for my AI startup"
+        Then you must only consider network members with type: "mentor" and category: "AI startup".
+        If a match is found, output only that network member’s name (e.g., "Alice Smith").
+        If no match is found, output exactly:
+        No match found yet.Try again later`;
 
         const result = await model.generateContent(prompt);
         const response = result.response.text();

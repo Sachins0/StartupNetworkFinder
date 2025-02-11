@@ -28,6 +28,7 @@ const SearchBox = ({ onCreditUpdate }) => {
       setResult(data.data.match);
       onCreditUpdate(data.data.remainingCredits);
     } catch (error) {
+      localStorage.setItem("creditError",error);
       console.log("error", error);
       setError(
         error.response?.data?.message || 
@@ -41,6 +42,8 @@ const SearchBox = ({ onCreditUpdate }) => {
       setLoading(false);
     }
   };
+
+  const creditError = localStorage.getItem("creditError");
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -61,14 +64,15 @@ const SearchBox = ({ onCreditUpdate }) => {
         </div>
         <button
           type="submit"
-          disabled={loading || !query.trim()}
+          disabled={loading || !query.trim() ||error || creditError} 
           className={`w-full py-2 px-4 rounded-lg text-white font-medium
-            ${loading || !query.trim()
+            ${loading || !query.trim() || error || creditError
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600'
             }`}
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? 'Searching...' : (error || creditError) ? 'Not Sufficient credit...': 'Search' }
+          
         </button>
       </form>
 
