@@ -31,6 +31,7 @@ const googleLogin = async (req, res) => {
                 .status(StatusCodes.CREATED)
                 .json(SuccessResponse);
     } catch (error) {
+        console.log("error at auth controller", error);
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while logging in';
         return res

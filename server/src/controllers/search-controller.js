@@ -47,6 +47,7 @@ const search = async (req, res) => {
                 .status(StatusCodes.OK)
                 .json(SuccessResponse);
     } catch (error) {
+        console.log("error at search controller", error);
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while doing match search';
         return res
@@ -64,6 +65,7 @@ const findAllInvestors = async (req, res) => {
                 .status(StatusCodes.OK)
                 .json(SuccessResponse);
       } catch (error) {
+        console.log("error at find all", error);
         ErrorResponse.error = error;
         ErrorResponse.message = 'Error fetching investors';
         return res

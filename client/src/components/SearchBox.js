@@ -28,7 +28,11 @@ const SearchBox = ({ onCreditUpdate }) => {
       setResult(data.data.match);
       onCreditUpdate(data.data.remainingCredits);
     } catch (error) {
-      localStorage.setItem("creditError",error);
+      if(error.response.data.message === 'Your credits are exhausted. Please check your email to recharge. Wait for 5 minutes and Login again for the changes to take effect.' 
+        || "Sorry, we are not offering additional credits at this time as you have already used your one-time recharge."){
+        localStorage.setItem("creditError","CreditError");
+      }
+      
       console.log("error", error);
       setError(
         error.response?.data?.message || 
@@ -71,7 +75,7 @@ const SearchBox = ({ onCreditUpdate }) => {
               : 'bg-blue-500 hover:bg-blue-600'
             }`}
         >
-          {loading ? 'Searching...' : (error || creditError) ? 'Not Sufficient credit...': 'Search' }
+          {loading ? 'Searching...' : (creditError) ? 'Not Sufficient credit...': 'Search' }
           
         </button>
       </form>

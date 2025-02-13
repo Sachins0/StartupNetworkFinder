@@ -29,6 +29,7 @@ const auth = async(req, res, next) => {
             req.user = user;
             req.token = token;
         } catch (error) {
+            console.log("error at verify token", error);
             ErrorResponse.error = error;
             ErrorResponse.message = 'Invalid token';
             return res
@@ -39,6 +40,7 @@ const auth = async(req, res, next) => {
         next();
    
       } catch (error) {
+        console.log("error at auth middleware", error);
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while authenticating';
         return res

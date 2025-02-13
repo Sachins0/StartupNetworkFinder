@@ -99,6 +99,7 @@ const checkRechargeEmails = async (req, res) => {
                 .status(StatusCodes.OK)
                 .json(SuccessResponse);
     } catch (error) {
+        console.log("error at credit controller", error);
         if(error.name=='GaxiosError'){
             let explanation=[];
             error.errors.forEach((err)=>explanation.push(err.message));

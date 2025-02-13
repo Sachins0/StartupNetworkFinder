@@ -39,6 +39,7 @@ const findMatch = async (query, networkMembers) => {
         const response = result.response.text();
         return response.trim();
     } catch (error) {
+        console.log("error at ai service", error);
         throw new AppError('AI Service Error', 500);
     }
 };
