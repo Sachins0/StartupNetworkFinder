@@ -33,7 +33,7 @@ const auth = async(req, res, next) => {
             ErrorResponse.error = error;
             ErrorResponse.message = 'Invalid token';
             return res
-                    .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                    .status(StatusCodes.INTERNAL_SERVER_ERROR)
                     .json(ErrorResponse);
         }
    
@@ -44,7 +44,7 @@ const auth = async(req, res, next) => {
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while authenticating';
         return res
-                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json(ErrorResponse);
       }
 };
