@@ -30,8 +30,12 @@ const getGmailClient = () => {
     return google.gmail({ version: 'v1', auth: oauth2Client });
 };
 
+const processRechargerequest = async() => {
+
+}
+
 //check recharge emails
-const checkRechargeEmails = async (req, res) => {
+const checkRechargeEmails = async () => {
     try {
         const gmail = getGmailClient();
 
@@ -46,10 +50,8 @@ const checkRechargeEmails = async (req, res) => {
         });
         console.log("response", response.data.messages);
         if (!response.data.messages) {
-            ErrorResponse.message = "No new recharge requests.";
-            return res
-                    .status(StatusCodes.NOT_FOUND)
-                    .json(ErrorResponse)
+            ErrorResponse.message = 'No new recharge requests'
+            return { Status: StatusCodes.NOT_FOUND, ErrorResponse};
         }
         // Process each email
         for (const message of response.data.messages) {
@@ -75,6 +77,7 @@ const checkRechargeEmails = async (req, res) => {
                 // Process recharge
                 user.credits = 5;
                 user.lastRechargeDate = new Date();
+                user.mailSent = false;
                 await user.save();
                 // Send confirmation email
                 await sendRechargeConfirmationEmail(senderEmail, user.credits);
@@ -95,25 +98,12 @@ const checkRechargeEmails = async (req, res) => {
         //return res
         SuccessResponse.message = 'Recharge requests processed. If any valid requests were found, the credits have been added to the respective accounts.';
         SuccessResponse.data = {};
-        return res
-                .status(StatusCodes.OK)
-                .json(SuccessResponse);
+        return {Status: StatusCodes.OK, SuccessResponse}
     } catch (error) {
         console.log("error at credit controller", error);
-        if(error.name=='GaxiosError'){
-            let explanation=[];
-            error.errors.forEach((err)=>explanation.push(err.message));
-            throw new AppError(explanation,StatusCodes.BAD_REQUEST);
-        }
-        if(error.name=='TypeError'){
-            throw new AppError(error.message, StatusCodes.BAD_REQUEST);
-        }
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while processing recharge requests';
-        console.log(ErrorResponse);
-        return res
-                .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(ErrorResponse);
+        return {Status: StatusCodes.INTERNAL_SERVER_ERROR, ErrorResponse};
     }
 };
 

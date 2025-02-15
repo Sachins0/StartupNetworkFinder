@@ -13,16 +13,12 @@ const Login = ({onLogin}) => {
                 headers: { Authorization: `Bearer ${response.access_token}` }
               }
             );
-
-            console.log("userInfo", userInfo);
     
             // Authenticate with our backend
             const { data } = await axios.post(
               `${process.env.REACT_APP_API_URL}/api/v1/auth/google`,
               { email: userInfo.data.email }
             );
-
-            console.log(data);
     
             localStorage.setItem('token', data.data.token);
             onLogin(data.data);

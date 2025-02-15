@@ -16,15 +16,23 @@ const search = async (req, res) => {
         //check credits
         if(user.credits <= 0){
             //send email
-            if(!user.lastRechargeDate){
-                await sendRechargeEmail(user.email);
+            if(!user.lastRechargeDate ){
+                if(user.mailSent === false){
+                    await sendRechargeEmail(user.email);
+                    user.mailSent = true;
+                    await user.save();
+                }
                 ErrorResponse.message = "Your credits are exhausted. Please check your email to recharge. Wait for 5 minutes and Login again for the changes to take effect.";
                 return res
                     .status(StatusCodes.BAD_REQUEST)
                     .json(ErrorResponse)
             }
             else{
-                await sendRechargeRejectionEmail(user.email);
+                if(user.mailSent === false){
+                    await sendRechargeRejectionEmail(user.email);
+                    user.mailSent = true;
+                    await user.save();
+                }
                 ErrorResponse.message = "Sorry, we are not offering additional credits at this time as you have already used your one-time recharge.";
                 return res
                     .status(StatusCodes.BAD_REQUEST)
@@ -49,9 +57,9 @@ const search = async (req, res) => {
     } catch (error) {
         console.log("error at search controller", error);
         ErrorResponse.error = error;
-        ErrorResponse.message = 'Something went wrong while doing match search';
+        ErrorResponse.message = 'Something went wrong while doing match search. Too may request. Try again after some time';
         return res
-                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json(ErrorResponse);
     }
 };
@@ -69,7 +77,7 @@ const findAllInvestors = async (req, res) => {
         ErrorResponse.error = error;
         ErrorResponse.message = 'Error fetching investors';
         return res
-                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json(ErrorResponse);
       }
 };

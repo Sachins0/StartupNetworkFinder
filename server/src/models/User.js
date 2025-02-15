@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     },
     lastRechargeDate: {
         type: Date
+    },
+    mailSent : {
+        type : Boolean,
+        default : false
     }
 },
 {timestamps: true}

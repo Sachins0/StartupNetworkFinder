@@ -4,7 +4,6 @@ import CreditsDisplay from './CreditsDisplay';
 import AllInvestors from './AllInvestors';
 
 const Dashboard = ({ onLogout, userData }) => {
-  console.log(userData);
   const [credits, setCredits] = useState(userData?.credits || localStorage.getItem('credits') || 0);
   localStorage.setItem('credits',credits)
 
@@ -12,8 +11,6 @@ const Dashboard = ({ onLogout, userData }) => {
     setCredits(newCredits);
     localStorage.setItem('credits',newCredits)
   };
-
-  console.log(credits);
 
   return (
     <div className="min-h-screen bg-gray-50">

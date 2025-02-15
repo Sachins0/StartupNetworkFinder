@@ -18,7 +18,6 @@ function AllInvestors() {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/findAll`, {
         headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
       });
-      console.log("response", response);
       setInvestors(response.data.data);
       setLoading(false);
     } catch (err) {

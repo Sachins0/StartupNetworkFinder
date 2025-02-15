@@ -35,7 +35,7 @@ const googleLogin = async (req, res) => {
         ErrorResponse.error = error;
         ErrorResponse.message = 'Something went wrong while logging in';
         return res
-                .status(error.status || StatusCodes.INTERNAL_SERVER_ERROR)
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json(ErrorResponse);
     }
 };

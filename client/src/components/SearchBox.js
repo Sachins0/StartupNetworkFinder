@@ -28,12 +28,10 @@ const SearchBox = ({ onCreditUpdate }) => {
       setResult(data.data.match);
       onCreditUpdate(data.data.remainingCredits);
     } catch (error) {
-      if(error.response.data.message === 'Your credits are exhausted. Please check your email to recharge. Wait for 5 minutes and Login again for the changes to take effect.' 
-        || "Sorry, we are not offering additional credits at this time as you have already used your one-time recharge."){
+      console.log(error);
+      if(error.status === 400){
         localStorage.setItem("creditError","CreditError");
       }
-      
-      console.log("error", error);
       setError(
         error.response?.data?.message || 
         'An error occurred. Please try again.'
@@ -68,9 +66,9 @@ const SearchBox = ({ onCreditUpdate }) => {
         </div>
         <button
           type="submit"
-          disabled={loading || !query.trim() ||error || creditError} 
+          disabled={loading || !query.trim() || creditError} 
           className={`w-full py-2 px-4 rounded-lg text-white font-medium
-            ${loading || !query.trim() || error || creditError
+            ${loading || !query.trim() || creditError
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600'
             }`}
